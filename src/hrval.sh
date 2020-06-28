@@ -140,7 +140,7 @@ function validate {
   if [[ "${ACTION}" == "kubeval" ]]; then
     kubeval --strict --ignore-missing-schemas --kubernetes-version "${KUBE_VER}" "${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml"
   elif [[ "${ACTION}" == "conftest" ]]; then
-    conftest -p "${POLICY_DIR}" test "${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml"
+    conftest -p "${POLICY_DIR}" -o stdout test --all-namespaces "${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml" --no-color || exit 0
   else
     echo "No action specified - please set 5th argument to kubeval or conftest"
   fi
