@@ -6,10 +6,12 @@ DIR=${1}
 IGNORE_VALUES=${2-false}
 KUBE_VER=${3-master}
 HELM_VER=${4-v2}
+ACTION=${5-kubeval}
+POLICY_DIR=${6-policy}
+AWS_S3_REPO=${7-false}
+AWS_S3_REPO_NAME=${8-""}
+AWS_S3_PLUGIN={$9-""}
 HRVAL="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/hrval.sh"
-AWS_S3_REPO=${5-false}
-AWS_S3_REPO_NAME=${6-""}
-AWS_S3_PLUGIN={$7-""}
 
 if [[ ${HELM_VER} == "v2" ]]; then
     helm init --client-only
@@ -47,7 +49,7 @@ DIR_PATH=$(echo ${DIR} | sed "s/^\///;s/\/$//")
 FILES_TESTED=0
 for f in `find ${DIR} -type f -name '*.yaml' -or -name '*.yml'`; do
   if [[ $(isHelmRelease ${f}) == "true" ]]; then
-    ${HRVAL} ${f} ${IGNORE_VALUES} ${KUBE_VER} ${HELM_VER}
+    ${HRVAL} ${f} ${IGNORE_VALUES} ${KUBE_VER} ${HELM_VER} ${HELM_ACTION} ${POLICY_DIR}
     FILES_TESTED=$(( FILES_TESTED+1 ))
   else
     echo "Ignoring ${f} not a HelmRelease"

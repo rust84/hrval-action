@@ -6,6 +6,8 @@ HELM_RELEASE=${1}
 IGNORE_VALUES=${2}
 KUBE_VER=${3-master}
 HELM_VER=${4-v2}
+ACTION=${5-kubeval}
+POLICY_DIR=${6-policy}
 
 if test ! -f "${HELM_RELEASE}"; then
   echo "\"${HELM_RELEASE}\" Helm release file not found!"
@@ -133,8 +135,15 @@ function validate {
       -f ${TMPDIR}/${HELM_RELEASE_NAME}.values.yaml > ${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml
   fi
 
-  echo "Validating Helm release ${HELM_RELEASE_NAME}.${HELM_RELEASE_NAMESPACE} against Kubernetes ${KUBE_VER}"
-  kubeval --strict --ignore-missing-schemas --kubernetes-version ${KUBE_VER} ${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml
+  echo "Checking Helm release ${HELM_RELEASE_NAME}.${HELM_RELEASE_NAMESPACE} against Kubernetes ${KUBE_VER} using ${ACTION}"
+
+  if [[ "${ACTION}" == "kubeval" ]]; then
+    kubeval --strict --ignore-missing-schemas --kubernetes-version "${KUBE_VER}" "${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml"
+  elif [[ "${ACTION}" == "conftest" ]]; then
+    conftest -p "${POLICY_DIR}" test "${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml"
+  else
+    echo "No action specified - please set 5th argument to kubeval or conftest"
+  fi
 }
 
 validate
