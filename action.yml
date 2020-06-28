@@ -11,21 +11,35 @@ inputs:
   ignoreValues:
     description: 'When set to true HelmRelease values will be ignored'
     default: 'false'
+    required: false
   kubernetesVersion:
     description: 'Version of Kubernetes to validate against'
     default: 'master'
+    required: false
   helmVersion:
     description: 'Version of Helm to validate against'
-    default: 'v2'
+    default: 'v3'
+    required: false
+  action:
+    description: 'Which tool to check the HelmRelease with'
+    default: 'kubeval'
+    required: false
+  policyDir:
+    description: 'Directory containing Rego policies for conftest'
+    default: 'policy'
+    required: false
   awsS3Repo:
     description: '(Optional) Set to true if using an AWS S3 Helm Repo'
-    default: false
+    default: 'false'
+    required: false
   awsS3RepoName:
     description: '(Optional) The name of the AWS S3 Helm repo, if awsS3Repo was set to true'
     default: ''
+    required: false
   awsS3Plugin:
     description: '(Optional) AWS S3 Plugin to be used in the helm plugin install command'
     default: ''
+    required: false
 outputs:
   numFilesTested:
     description: The number of HelmRelease files which were tested
@@ -38,6 +52,8 @@ runs:
     - ${{ inputs.ignoreValues }}
     - ${{ inputs.kubernetesVersion }}
     - ${{ inputs.helmVersion }}
+    - ${{ inputs.action }}
+    - ${{ inputs.policyDir }}
     - ${{ inputs.awsS3Repo }}
     - ${{ inputs.awsS3RepoName }}
     - ${{ inputs.awsS3RepoPlugin }}
