@@ -142,7 +142,7 @@ function validate {
   elif [[ "${ACTION}" == "conftest" ]]; then
     conftest -p "${POLICY_DIR}" test "${TMPDIR}/${HELM_RELEASE_NAME}.release.yaml"
   else
-    echo "No action specified - please set 5th argument to kubeval or conftest debug: ${ACTION}"
+    echo "No action specified - please set 5th argument to kubeval or conftest"
   fi
 }
 

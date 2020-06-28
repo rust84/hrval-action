@@ -49,7 +49,7 @@ DIR_PATH=$(echo ${DIR} | sed "s/^\///;s/\/$//")
 FILES_TESTED=0
 for f in `find ${DIR} -type f -name '*.yaml' -or -name '*.yml'`; do
   if [[ $(isHelmRelease ${f}) == "true" ]]; then
-    ${HRVAL} ${f} ${IGNORE_VALUES} ${KUBE_VER} ${HELM_VER} ${HELM_ACTION} ${POLICY_DIR}
+    ${HRVAL} ${f} ${IGNORE_VALUES} ${KUBE_VER} ${HELM_VER} ${ACTION} ${POLICY_DIR}
     FILES_TESTED=$(( FILES_TESTED+1 ))
   else
     echo "Ignoring ${f} not a HelmRelease"
