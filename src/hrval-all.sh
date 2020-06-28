@@ -59,6 +59,10 @@ for f in `find ${DIR} -type f -name '*.yaml' -or -name '*.yml'`; do
 done
 
 RESULT=$(cat /tmp/result.txt)
+RESULT="${result//'%'/'%25'}"
+RESULT="${result//$'\n'/'%0A'}"
+RESULT="${result//$'\r'/'%0D'}"
+
 # This will set the GitHub actions output 'numFilesTested'
 echo "::set-output name=numFilesTested::${FILES_TESTED}"
 echo "::set-output name=result::${RESULT}"
