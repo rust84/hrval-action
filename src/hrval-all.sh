@@ -51,7 +51,7 @@ echo -n > /tmp/result.txt
 
 for f in `find ${DIR} -type f -name '*.yaml' -or -name '*.yml'`; do
   if [[ $(isHelmRelease ${f}) == "true" ]]; then
-    ${HRVAL} ${f} ${IGNORE_VALUES} ${KUBE_VER} ${HELM_VER} ${ACTION} ${POLICY_DIR} 2>&1 | tee -a /tmp/result.txt
+    ${HRVAL} ${f} ${IGNORE_VALUES} ${KUBE_VER} ${HELM_VER} ${ACTION} ${POLICY_DIR} | tee -a /tmp/result.txt
     FILES_TESTED=$(( FILES_TESTED+1 ))
   else
     echo "Ignoring ${f} not a HelmRelease"
